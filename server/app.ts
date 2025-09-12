@@ -31,6 +31,7 @@ const limiter = rateLimit({
   legacyHeaders: false,
   ipv6Subnet: 56,
 });
+app.use(limiter);
 // Apply the rate limiting middleware to all requests.
 // testing api
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
@@ -53,5 +54,4 @@ app.all(/(.*)/, (req: Request, res: Response, next: NextFunction) => {
   next(err);
 });
 //Middleware Calls
-app.use(limiter);
 app.use(ErrorMiddleware);

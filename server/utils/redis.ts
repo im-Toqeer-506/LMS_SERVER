@@ -7,4 +7,4 @@ const redisClent= ()=>{
     }
     throw new Error('Redis Connection Faild');
 }
-export const redis =new Redis(redisClent())
+export const redis =new Redis(redisClent());
