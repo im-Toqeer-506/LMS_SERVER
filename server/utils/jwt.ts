@@ -35,3 +35,22 @@ export const refreshTokenOptions: ITokenOptions = {
   secure: isProduction,
   sameSite: isProduction ? "none" : "lax",
 };
+
+export const sendToken = (user: IUser, statusCode: number, res: Response) => {
+  const access_token = user.SignAccessToken();
+  const refresh_token = // client IP (X-Forwarded-For) instead of the proxy's.
+user.SignRefreshToken();
+  //Upload session to (cashe) redis
+  redis.set(user._id, JSON.stringify(user) as any);
+   //only set secure to true in production
+  if (process.env.NODE_ENV === "production") {
+    accessTokenOptions.secure = true;
+  }
+  res.cookie("access_token", access_token, accessTokenOptions);
+  res.cookie("refresh_token", refresh_token, refreshTokenOptions);
+  res.status(statusCode).json({
+    success: true,
+    user,
+    access_token,
+  });
+};
